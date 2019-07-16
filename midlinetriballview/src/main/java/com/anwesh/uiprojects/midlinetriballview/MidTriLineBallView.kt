@@ -214,4 +214,13 @@ class MidTriLineBallView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : MidTriLineBallView {
+            val view : MidTriLineBallView = MidTriLineBallView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
