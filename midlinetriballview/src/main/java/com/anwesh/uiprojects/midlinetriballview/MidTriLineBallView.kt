@@ -133,7 +133,7 @@ class MidTriLineBallView(ctx : Context) : View(ctx) {
         init {
             addNeighbor()
         }
-        
+
         fun addNeighbor() {
             if (i < nodes - 1) {
                 next = MTLBNode(i + 1)
@@ -166,6 +166,30 @@ class MidTriLineBallView(ctx : Context) : View(ctx) {
             }
             cb()
             return this
+        }
+    }
+
+    data class MidTriLineBall(var i : Int) {
+
+        private val root : MTLBNode = MTLBNode(0)
+        private var curr : MTLBNode = root
+        private var dir : Int = 1
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            root.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            curr.update {i, scl ->
+                curr = curr.getNext(dir) {
+                    dir *= -1
+                }
+                cb(i, scl)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            curr.startUpdating(cb)
         }
     }
 }
