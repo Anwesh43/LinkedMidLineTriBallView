@@ -192,4 +192,26 @@ class MidTriLineBallView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : MidTriLineBallView) {
+
+        private val animator : Animator = Animator(view)
+        private val mtlb : MidTriLineBall = MidTriLineBall(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            mtlb.draw(canvas, paint)
+            animator.animate {
+                mtlb.update {i, scl ->
+                    animator.start()
+                }
+            }
+        }
+
+        fun handleTap() {
+            mtlb.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
