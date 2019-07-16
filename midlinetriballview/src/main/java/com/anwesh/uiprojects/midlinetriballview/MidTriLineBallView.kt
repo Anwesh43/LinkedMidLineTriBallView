@@ -124,4 +124,48 @@ class MidTriLineBallView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class MTLBNode(var i : Int, val state : State = State()) {
+
+        private var next : MTLBNode? = null
+        private var prev : MTLBNode? = null
+
+        init {
+            addNeighbor()
+        }
+        
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = MTLBNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawMLTBNode(i, state.scale, paint)
+            next?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : MTLBNode {
+            var curr : MTLBNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
